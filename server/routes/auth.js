@@ -17,14 +17,20 @@ router.post('/signup',(req,res)=>{
     if(saveduser){
       res.status(422).json({error:"user already existed"});
     }
-    bcrypt.hash(password,12);
-    const user=new User({
-      email,
-      name,
-      password
-    })
-    user.save().then(user=>{
+    bcrypt.hash(password,12)
+    .then(hashedpassword=>{
+      console.log(hashedpassword);
+        const user=new User({
+        email,
+        name,
+        password:hashedpassword.toString()
+      })
+      user.save().then(user=>{
       res.json({message:"saved successfully"})
+      })
+      .catch(error=>{
+        console.log(error);
+      })
     })
     .catch(error=>{
       console.log(error);
