@@ -11,9 +11,11 @@ mongoose.connection.on('error',(error)=>{
   console.log("error "+error);
 })
 require('../models/user');
+require('../models/post');
+
 app.use(express.json());
 app.use(require('./routes/auth'));
-
+app.use(require('./routes/post'));
 app.listen(port,()=>{
   console.log("server has started on localhost:"+port);
 })
