@@ -5,6 +5,7 @@ const User=mongoose.model('User');
 
 
 module.exports=(req,res,next)=>{
+  console.log(req.headers.authorization);
   const { authorization }=req.headers;
   if(!authorization)
   {
@@ -15,9 +16,11 @@ module.exports=(req,res,next)=>{
     if(err){
       return res.status(401).json({error:"you must be logged in"});
     }
+    console.log(payload);
     const {_id}=payload;
     User.findOne({_id}).then(userdata=>{
       req.user=userdata;
+      console.log(req.user);
       next();
     })
     .catch(err => {
