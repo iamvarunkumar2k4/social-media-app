@@ -32,7 +32,9 @@ const Signup=()=>{
           navigate('/login');
         }
         console.log(data);
-      });
+      }).catch(error=>{
+        console.log(error);
+      })
   }
   return(
     <div className="mycard">
