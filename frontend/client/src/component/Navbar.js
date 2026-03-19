@@ -6,7 +6,7 @@ const Navbar=()=>{
     <div className="nav-wrapper">
       <Link to="/" className="brand-logo left">Social</Link>
       <ul id="nav-mobile" className="right ">
-        <li><Link to="/login">Login</Link></li>
+        <li><Link to="/signin">Login</Link></li>
         <li><Link to="/signup">Sign up</Link></li>
         <li><Link to="/profile">Profile</Link></li>
         <li><Link to="/createpost">createpost</Link></li>

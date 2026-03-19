@@ -2,52 +2,48 @@ import React,{useState} from "react";
 import {Link,useNavigate} from 'react-router-dom';
 import m from "materialize-css"
 
- const createPost=()=>{
+const CreatePost=()=>{
   const navigate=useNavigate();
   const [title,settitle]=useState("");
   const [body,setbody]=useState("");
   const [photo,setphoto]=useState("");
-  const [url,seturl]=useState("");
-  const postdetails=()=>{
+  const postDetails=()=>{
     const data=new FormData();
     data.append("file",photo);
-    data.append("upload_preset","instagram-clone");
-    data.append("clous_name","cnq");
-    fetch("/createpost",{
+    data.append("upload_preset","insta-clone");
+    data.append("clous_name","derfoal4d");
+    fetch("https://api.cloudinary.com/v1_1/derfoal4d/image/upload",{
       method:"post",
       body:data
     })
-    .then(res=>res.json())
-    .then(data=>{
-      console.log(data);
+    .then(res => res.json())
+    .then(result => {
+      const imageUrl = result.url;
+
+      return fetch("/createpost", {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("jwt")
+        },
+        body: JSON.stringify({
+          title,
+          body,
+          photo: imageUrl
+        })
+      });
     })
-    .catch(error=>{
-      console.log(error);
-    })
-    fetch("/createpost",{
-    method: "post",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      title,
-      body,
-      photo
-    })
-  }).then(res => res.json())
+    .then(res => res.json())
     .then(data => {
-      if(data.error){
-        m.toast({html:data.error,classes:"#c62828 red darken-3"});
+      if (data.error) {
+        m.toast({ html: data.error, classes: "#c62828 red darken-3" });
+      } else {
+        m.toast({ html: "Post created successfully", classes: "#43a047 green darken-1" });
+        navigate("/");
       }
-      else{
-        m.toast({html:data.message,classes:"#43a047 green darken-1"});
-        navigate('/login');
-      }
-      console.log(data);
-    }).catch(error=>{
-      console.log(error);
     })
-  }
+    .catch(err => console.log(err));
+};
   return(
     <div className="card input-filled" style={{
       margin:"30px auto",
@@ -68,10 +64,10 @@ import m from "materialize-css"
           <input className="file-path-value" type="text"></input>
         </div>
       </div>
-      <button className="waves-effect waves-light btn #64b56 blue darken-1" onClick={()=>postdetails()}>
+      <button className="waves-effect waves-light btn #64b56 blue darken-1" onClick={()=>postDetails()}>
         submit post
       </button>
     </div>
   );
  }
- export default createPost;
+ export default CreatePost;
